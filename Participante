@@ -10,8 +10,7 @@ public class Participante {
     static ArrayList<Participante> participantes = new ArrayList<>();
 
     // Construtor que inicializa o Participante
-    public Participante(int id, String nome, String departamento) {
-        this.id = id;
+    public Participante(String nome, String departamento) {
         this.nome = nome;
         this.departamento = departamento;
 
