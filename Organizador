@@ -10,8 +10,7 @@ public class Organizador {
     static ArrayList<Organizador> organizadores = new ArrayList<>();
 
     // Construtor que inicializa o Organizador
-    public Organizador(int id, String nome, String departamento) {
-        this.id = id;
+    public Organizador(String nome, String departamento) {
         this.nome = nome;
         this.departamento = departamento;
 
