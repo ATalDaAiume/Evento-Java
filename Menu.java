@@ -14,7 +14,9 @@ public class Menu {
             System.out.println("4 - Listar Organizador");
             System.out.println("5 - Listar Evento");
             System.out.println("6 - Listar Participante");
-            System.out.println("7 - Sair");
+            System.out.println("7 - Listar Notificações");
+            System.out.println("8 - Enviar Notificação");
+            System.out.println("9 - Sair");
 
             try {
                 // Tentando capturar a opção escolhida pelo usuário
@@ -33,93 +35,101 @@ public class Menu {
                         int idProfessor = scanner.nextInt();
                         System.out.println("Digite o Nome do Organizador: ");
                         String nome = scanner.next();
-                        System.out.println("Digite o Departamento do Professor: ");
+                        System.out.println("Digite o Departamento do Organizador: ");
                         String departamento = scanner.next();
-                        // Criação de um novo objeto Professor
-                        new Professor(idProfessor, nome, departamento);
+                        // Criação de um novo objeto Organizador
+                        new Organizador(idProfessor, nome, departamento);
                     } catch (Exception e) {
-                        System.out.println("Erro ao cadastrar o Professor");
+                        System.out.println("Erro ao cadastrar o Organizador");
                     }
                     break;
                 case 2:
                     try {
                         // Cadastro de Evento
                         System.out.println("Cadastrar Evento");
-                        System.out.println("Digite o Id do Curso: ");
-                        int idCurso = scanner.nextInt();
-                        System.out.println("Digite o Nome do Curso: ");
-                        String nome = scanner.next();
-                        System.out.println("Digite as Horas do Curso: ");
-                        int horas = scanner.nextInt();
-                        System.out.println("Digite o Id do Professor do Curso: ");
-                        int idProfessor = scanner.nextInt();
-                        // Criação de um novo objeto Curso
-                        new Curso(idCurso, nome, horas, idProfessor);
+                        System.out.println("Digite o Id do Evento: ");
+                        int idEvento = scanner.nextInt();
+                        System.out.println("Digite a Descrição do Evento: ");
+                        String descricao = scanner.next();
+                        System.out.println("Digite a Data do Evento: ");
+                        int data = scanner.nextInt();
+                        System.out.println("Digite o número de vagas: ");
+                        int vagas = scanner.nextInt();
+                        // Criação de um novo evento
+                        new Evento(idEvento, descricao, data, vagas);
                     } catch (Exception e) {
-                        System.out.println("Erro ao cadastrar o Curso");
+                        System.out.println("Erro ao cadastrar o Evento");
                     }
                     break;
                 case 3:
                     try {
-                        // Cadastro de aluno
-                        System.out.println("Cadastrar Aluno");
-                        System.out.println("Digite o Id do Aluno: ");
-                        int idAluno = scanner.nextInt();
-                        System.out.println("Digite o Nome do Aluno: ");
-                        String nome = scanner.next();
-                        System.out.println("Digite a Data de Nascimento do Aluno: ");
-                        String nascimento = scanner.next();
-                        System.out.println("Digite o CPF do Aluno: ");
-                        String CPF = scanner.next();
-                        System.out.println("Digite o Id do Curso: ");
-                        int idCurso = scanner.nextInt();
-                        // Verifica se o curso existe
-                        Curso curso = Curso.buscaCurso(idCurso);
-                        if (curso == null) {
-                            throw new Exception("Curso não encontrado");
-                        }
-                        // Criação de um novo objeto Aluno
-                        new Aluno(idAluno, nome, nascimento, CPF, idCurso);
-
+                        // Cadastro de Participante
+                        System.out.println("Cadastrar Participante");
+                        System.out.println("Digite o Id do Participante: ");
+                        int idParticipante = scanner.nextInt();
+                        System.out.println("Digite o Nome do Participante: ");
+                        String nomeParticipante = scanner.next();
+                        System.out.println("Digite o Departamento do Participante: ");
+                        String departamentoParticipante = scanner.next();
+                        // Criação de um novo Participante
+                        new Participante(nomeParticipante, departamentoParticipante);
                     } catch (Exception e) {
-                        System.out.println("Erro ao cadastrar o Aluno. " + e.getMessage());
+                        System.out.println("Erro ao cadastrar o Participante");
                     }
                     break;
                 case 4:
-                    // Listar todos os professores
-                    System.out.println("Listar Professores");
-                    for (Professor professor : Professor.professores) {
-                        // Contando cursos e alunos por professor
-                        int cursosPorProfessor = Curso.contarCursosPorProfessor(professor.id);
-                        int alunosPorCurso = Aluno.contarAlunosPorCurso(professor.id);
-                        // Exibição das informações dos professores
-                        System.out.println("Nome: " + professor.nome + " Departamento: " + professor.departamento +
-                                           " Cursos: " + cursosPorProfessor + " Alunos: " + alunosPorCurso);
+                    // Listar todos os Organizadores
+                    System.out.println("Listar Organizadores");
+                    for (Organizador organizador : Organizador.organizadores) {
+                        // Exibição das informações dos Organizadores
+                        System.out.println("Nome: " + organizador.nome + " Departamento: " + organizador.departamento);
                     }
                     break;
                 case 5:
-                    // Listar todos os cursos
-                    System.out.println("Listar Cursos");
-                    for (Curso curso : Curso.cursos) {
-                        // Buscando o professor responsável pelo curso
-                        Professor professor = Professor.buscaProfessor(curso.idProfessor);
-                        String nomeProfessor = professor != null ? professor.nome : "Professor não encontrado";
-                        // Exibição das informações dos cursos
-                        System.out.println("Nome: " + curso.nome + " Carga Horária: " + curso.horas + " Nome do Professor: " + nomeProfessor);
+                    // Listar todos os Eventos
+                    System.out.println("Listar Eventos");
+                    for (Evento evento : Evento.eventos) {
+                        // Exibição das informações dos Eventos
+                        System.out.println("Evento: " + evento.descricao + " Data: " + evento.data + " Vagas: " + evento.vagas);
                     }
                     break;
                 case 6:
-                    // Listar todos os alunos
-                    System.out.println("Listar Alunos");
-                    for (Aluno aluno : Aluno.alunos) {
-                        // Buscar o curso pelo ID do aluno
-                        Curso curso = Curso.buscaCurso(aluno.idCurso);
-                        String nomeCurso = (curso != null) ? curso.nome : "Curso não encontrado";
-                        // Exibição dos dados do aluno e o nome do curso
-                        System.out.println("Nome: " + aluno.nome + " Data de Nascimento: " + aluno.nascimento + " CPF: " + aluno.CPF + " Curso: " + nomeCurso);
+                    // Listar todos os Participantes
+                    System.out.println("Listar Participantes");
+                    for (Participante participante : Participante.participantes) {
+                        // Exibição das informações dos Participantes
+                        System.out.println("Nome: " + participante.nome + " Departamento: " + participante.departamento);
                     }
-                    break;                
+                    break;
                 case 7:
+                    // Listar todas as notificações
+                    System.out.println("Listar Notificações");
+                    for (Notificacao notificacao : Notificacao.notificacoes) {
+                        // Exibição das informações das notificações
+                        System.out.println("Notificação para " + notificacao.destinatario + " Tipo: " + notificacao.tipo +
+                                           " Status: " + notificacao.status + " Mensagem: " + notificacao.mensagem);
+                    }
+                    break;
+                case 8:
+                    // Enviar Notificação
+                    try {
+                        System.out.println("Enviar Notificação");
+                        System.out.println("Digite o tipo da notificação (email ou telefone): ");
+                        String tipoNotificacao = scanner.next();
+                        System.out.println("Digite a mensagem da notificação: ");
+                        String mensagem = scanner.next();
+                        System.out.println("Digite o destinatário (nome): ");
+                        String destinatario = scanner.next();
+
+                        // Criação de uma nova notificação
+                        Notificacao not = new Notificacao(1, mensagem, destinatario, tipoNotificacao);
+                        not.enviarNotificacao();
+                        System.out.println("Notificação enviada!");
+                    } catch (Exception e) {
+                        System.out.println("Erro ao enviar notificação: " + e.getMessage());
+                    }
+                    break;
+                case 9:
                     // Finalizando o programa
                     System.out.println("Saindo...");
                     break;
@@ -128,7 +138,7 @@ public class Menu {
                     System.out.println("Opção inválida");
                     break;
             }
-        } while (opt != 7);  // O loop continua até que o usuário escolha a opção de sair (7)
+        } while (opt != 9);  // O loop continua até que o usuário escolha a opção de sair (9)
 
         scanner.close();  // Fechando o scanner para liberar os recursos
     }

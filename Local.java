@@ -1,60 +1,92 @@
+import java.sql.*;
 import java.util.ArrayList;
 
 public class Local {
+    private static int idCounter = 1;
+    private int id;
+    private String nome;
+    private String endereco;
 
-    // Atributos do local
-    int id;
-    String nome;
-    int horas;
-    int idProfessor;
+    // Lista estática para armazenar os locais em memória
+    private static ArrayList<Local> locais = new ArrayList<>();
 
-    Professor professor; // Referência ao professor responsável pelo local
-
-    // Lista estática que armazena todos os locais criados
-    static ArrayList<Local> locais = new ArrayList<>();
-    
-    // Construtor que inicializa o curso com um ID de professor
-    public Local(int id, String nome, int horas, int idProfessor) {
-        this.id = id;
+    public Local(String nome, String endereco) {
+        this.id = idCounter++;
         this.nome = nome;
-        this.horas = horas;
-        this.idProfessor = idProfessor;
-
-        // Adiciona o local à lista de locais
-        locais.add(this);
+        this.endereco = endereco;
     }
 
-    // Construtor alternativo que recebe diretamente um objeto Professor
-    public Local(int id, String nome, int horas, Professor professor) {
-        this.id = id;
-        this.nome = nome;
-        this.horas = horas;
-        this.professor = professor;
-
-        // Adiciona o local à lista de locais
-        locais.add(this);
+    public int getId() {
+        return id;
     }
 
-    // Método estático para buscar um local pelo seu ID
-    static Local buscaLocal(int id) {
+    public String getNome() {
+        return nome;
+    }
+
+    public String getEndereco() {
+        return endereco;
+    }
+
+    // CRUD: Adicionar local
+    public static void adicionarLocal(Local local) {
+        String sql = "INSERT INTO Local (nome, endereco) VALUES (?, ?)";
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, local.nome);
+            stmt.setString(2, local.endereco);
+            stmt.executeUpdate();
+            locais.add(local); // Adiciona à lista em memória após inserir no banco
+        } catch (SQLException e) {
+            System.out.println("Erro ao adicionar local: " + e.getMessage());
+        }
+    }
+
+    // CRUD: Listar locais
+    public static ArrayList<Local> listarLocais() {
+        return locais;
+    }
+
+    // CRUD: Atualizar local
+    public static void atualizarLocal(int id, String novoNome, String novoEndereco) {
         for (Local local : locais) {
-            // Se encontrar o local com o ID correspondente, retorna o local
-            if (local.id == id) {
-                return local;
+            if (local.getId() == id) {
+                local.nome = novoNome;
+                local.endereco = novoEndereco;
+
+                // Atualiza no banco de dados
+                String sql = "UPDATE Local SET nome=?, endereco=? WHERE id=?";
+                try (Connection conn = ConnectionFactory.getConnection();
+                     PreparedStatement stmt = conn.prepareStatement(sql)) {
+                    stmt.setString(1, novoNome);
+                    stmt.setString(2, novoEndereco);
+                    stmt.setInt(3, id);
+                    stmt.executeUpdate();
+                } catch (SQLException e) {
+                    System.out.println("Erro ao atualizar local: " + e.getMessage());
+                }
+                break;
             }
         }
-        return null; // Retorna null se o local não for encontrado
     }
 
-    // Método estático que conta quantos locais são ministrados por um professor específico
-    static int contarLocaisdeEvento(int idProfessor) {
-        int cont = 0;
-        for (Local local : locais) {
-            // Verifica se o ID do professor do local corresponde ao ID fornecido
-            if (local.idProfessor == idProfessor) {
-                cont++;
-            }
+    // CRUD: Deletar local
+    public static void deletarLocal(int id) {
+        locais.removeIf(local -> local.getId() == id);
+
+        // Deletar no banco de dados
+        String sql = "DELETE FROM Local WHERE id=?";
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Erro ao deletar local: " + e.getMessage());
         }
-        return cont;
+    }
+
+    @Override
+    public String toString() {
+        return "Local [id=" + id + ", nome=" + nome + ", endereco=" + endereco + "]";
     }
 }

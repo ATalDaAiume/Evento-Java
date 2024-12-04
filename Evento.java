@@ -1,53 +1,51 @@
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Evento {
-    
-    // Atributos da pessoa
-    int id;
-    int idOrganizador;
-    int idLocal;
-    int data;
-    String descricao;
-    int vagas;
+    private static int idCounter = 1;
+    private int id;
+    private String nome;
+    private String localizacao;
+    private Date data;
 
-    Curso curso; // Referência ao curso do aluno
+    // Lista estática para armazenar eventos em memória
+    private static ArrayList<Evento> eventos = new ArrayList<>();
 
-    // Lista estática que armazena todos os alunos criados
-    static ArrayList<Aluno> alunos = new ArrayList<>();
-    
-    // Construtor que inicializa o aluno com um ID de curso
-    public Aluno(int id, String nome, String nascimento, String CPF, int idCurso) {
-        this.id = id;
+    public Evento(String nome, String localizacao, Date data) {
+        this.id = idCounter++;
         this.nome = nome;
-        this.nascimento = nascimento;
-        this.CPF = CPF;
-        this.idCurso = idCurso;
-
-        // Adiciona o aluno à lista de alunos
-        alunos.add(this);
+        this.localizacao = localizacao;
+        this.data = data;
     }
 
-    // Construtor alternativo que recebe diretamente um objeto Curso
-    public Aluno(int id, String nome, String nascimento, String CPF, Curso curso) {
-        this.id = id;
-        this.nome = nome;
-        this.nascimento = nascimento;
-        this.CPF = CPF;
-        this.curso = curso;
-
-        // Adiciona o aluno à lista de alunos
-        alunos.add(this);
+    public int getId() {
+        return id;
     }
 
-    // Método estático que conta quantos alunos estão em um determinado curso
-    static int contarAlunosPorCurso(int idCurso) {
-        int cont = 0;
-        for (Aluno aluno : alunos) {
-            // Verifica se o ID do curso do aluno corresponde ao ID fornecido
-            if (aluno.idCurso == idCurso) {
-                cont++;
-            }
-        }
-        return cont;
+    public String getNome() {
+        return nome;
+    }
+
+    public String getLocalizacao() {
+        return localizacao;
+    }
+
+    public Date getData() {
+        return data;
+    }
+
+    // CRUD: Adicionar evento
+    public static void adicionarEvento(Evento evento) {
+        eventos.add(evento);
+    }
+
+    // CRUD: Listar eventos
+    public static ArrayList<Evento> listarEventos() {
+        return eventos;
+    }
+
+    @Override
+    public String toString() {
+        return "Evento [id=" + id + ", nome=" + nome + ", localizacao=" + localizacao + ", data=" + data + "]";
     }
 }

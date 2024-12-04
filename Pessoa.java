@@ -1,53 +1,48 @@
 import java.util.ArrayList;
 
-public class Pessoa {
-    
-    // Atributos da pessoa
-    int idPessoa;
-    String nome;
+public abstract class Pessoa {
+    private static int idCounter = 1;
+    private int id;
+    private String nome;
+    private String tipo;
 
-    Organizador organizador;
-    Participante participante;
+    // Lista estática para armazenar as pessoas em memória
+    private static ArrayList<Pessoa> pessoas = new ArrayList<>();
 
-    // Lista estática que armazena todas as Pessoas criadas
-    static ArrayList<Pessoa> pessoas = new ArrayList<>();
-    
-    // Construtor que inicializa a pessoa... Não sei se deve ser com Organizador ou participante ainda
-    public Pessoa(int id, String nome) {
-        this.id = id;
+    public Pessoa(String nome, String tipo) {
+        this.id = idCounter++;
         this.nome = nome;
-
-        // Adiciona a pessoa à lista de pessoas
-        pessoas.add(this);
+        this.tipo = tipo;
+        pessoas.add(this); // Adiciona a pessoa à lista em memória
     }
 
-    // Construtor alternativo que recebe diretamente um objeto
-    public Pessoa(int id, String nome) {
-        this.id = id;
-        this.nome = nome;
-
-        // Adiciona a pessoa à lista de pessoas
-        pessoas.add(this);
+    public int getId() {
+        return id;
     }
 
-    // Método estático que conta quantas pessoas são organizadoras
-    static int contarOrganizador(int idOrganizador) {
-        int cont = 0;
-        for (Pessoa pessoa : pessoas) {
-            // Verifica se o ID do organizador corresponde ao ID fornecido
-            if (pessoa.idOrganizador == idOrganizador) {
-                cont++;
-            }
+    public String getNome() {
+        return nome;
+    }
 
-    // Método estático que conta quantas pessoas são participantes
-    static int contarParticipante(int idParticipante) {
-        int cont = 0;
+    public String getTipo() {
+        return tipo;
+    }
+
+    public static ArrayList<Pessoa> getPessoas() {
+        return pessoas;
+    }
+
+    public static Pessoa buscarPessoaPorId(int id) {
         for (Pessoa pessoa : pessoas) {
-            // Verifica se o ID do participante corresponde ao ID fornecido
-            if (pessoa.idParticipante == idParticipante) {
-                cont++;
+            if (pessoa.getId() == id) {
+                return pessoa;
             }
         }
-        return cont;
+        return null;
+    }
+
+    @Override
+    public String toString() {
+        return "Pessoa [id=" + id + ", nome=" + nome + ", tipo=" + tipo + "]";
     }
 }
