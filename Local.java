@@ -90,3 +90,18 @@ public class Local {
         return "Local [id=" + id + ", nome=" + nome + ", endereco=" + endereco + "]";
     }
 }
+
+// ConnectionFactory Class
+class ConnectionFactory {
+    private static final String URL = "jdbc:mysql://localhost:3306/sua_base_de_dados"; // Substitua pelo URL do seu banco
+    private static final String USER = "seu_usuario"; // Substitua pelo seu usuário
+    private static final String PASSWORD = "sua_senha"; // Substitua pela sua senha
+
+    public static Connection getConnection() {
+        try {
+            return DriverManager.getConnection(URL, USER, PASSWORD);
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao conectar ao banco de dados: " + e.getMessage(), e);
+        }
+    }
+}

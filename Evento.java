@@ -1,51 +1,69 @@
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class Evento {
-    private static int idCounter = 1;
-    private int id;
-    private String nome;
-    private String localizacao;
-    private Date data;
+    private int idEvento;
+    private String descricao;
+    private int vagas;
+    private int idOrganizador;
 
-    // Lista estática para armazenar eventos em memória
+    // Lista para armazenar eventos em memória
     private static ArrayList<Evento> eventos = new ArrayList<>();
 
-    public Evento(String nome, String localizacao, Date data) {
-        this.id = idCounter++;
-        this.nome = nome;
-        this.localizacao = localizacao;
-        this.data = data;
+    // Construtor
+    public Evento(String descricao, int vagas, int idOrganizador) {
+        this.descricao = descricao;
+        this.vagas = vagas;
+        this.idOrganizador = idOrganizador;
     }
 
-    public int getId() {
-        return id;
+    // Getters
+    public int getIdEvento() {
+        return idEvento;
     }
 
-    public String getNome() {
-        return nome;
+    public String getDescricao() {
+        return descricao;
     }
 
-    public String getLocalizacao() {
-        return localizacao;
+    public int getVagas() {
+        return vagas;
     }
 
-    public Date getData() {
-        return data;
+    public int getIdOrganizador() {
+        return idOrganizador;
     }
 
-    // CRUD: Adicionar evento
-    public static void adicionarEvento(Evento evento) {
-        eventos.add(evento);
+    // Método para salvar o evento no banco de dados
+    public void salvar() {
+        String sql = "INSERT INTO Evento (descricao, vagas, idOrganizador) VALUES (?, ?, ?)";
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, descricao);
+            stmt.setInt(2, vagas);
+            stmt.setInt(3, idOrganizador);
+
+            stmt.executeUpdate();
+            System.out.println("Evento salvo com sucesso no banco de dados!");
+
+            // Adiciona o evento à lista em memória
+            eventos.add(this);
+        } catch (SQLException e) {
+            System.out.println("Erro ao salvar evento: " + e.getMessage());
+        }
     }
 
-    // CRUD: Listar eventos
+    // Método para listar todos os eventos
     public static ArrayList<Evento> listarEventos() {
         return eventos;
     }
 
     @Override
     public String toString() {
-        return "Evento [id=" + id + ", nome=" + nome + ", localizacao=" + localizacao + ", data=" + data + "]";
+        return "Evento [idEvento=" + idEvento + ", descricao=" + descricao +
+                ", vagas=" + vagas + ", idOrganizador=" + idOrganizador + "]";
     }
 }

@@ -42,7 +42,7 @@ public class Organizador extends Pessoa {
     public static void atualizarOrganizador(int id, String novoNome, String novoDepto, String novoEmail, String novoTelefone) {
         for (Organizador organizador : organizadores) {
             if (organizador.getId() == id) {
-                organizador.nome = novoNome;
+                organizador.setNome(novoNome); // Atualiza o nome usando o setter
                 organizador.departamento = novoDepto;
                 organizador.email = novoEmail;
                 organizador.telefone = novoTelefone;
@@ -82,6 +82,7 @@ public class Organizador extends Pessoa {
 
     @Override
     public String toString() {
-        return "Organizador [id=" + getId() + ", nome=" + getNome() + ", departamento=" + departamento + ", email=" + email + ", telefone=" + telefone + "]";
+        return "Organizador [id=" + getId() + ", nome=" + getNome() + ", departamento=" + departamento +
+                ", email=" + email + ", telefone=" + telefone + "]";
     }
 }

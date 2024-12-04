@@ -1,4 +1,3 @@
-import java.sql.*;
 import java.util.ArrayList;
 
 public abstract class Pessoa {
@@ -25,6 +24,10 @@ public abstract class Pessoa {
         return nome;
     }
 
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
     public String getTipo() {
         return tipo;
     }
@@ -38,10 +41,8 @@ public abstract class Pessoa {
             if (pessoa.getId() == id) {
                 return pessoa;
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
-        return null;
+        return null; // Retorna null se não encontrar a pessoa
     }
 
     @Override
