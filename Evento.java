@@ -1,53 +1,87 @@
-import java.util.ArrayList;
+import java.sql.*;
 
 public class Evento {
-    
-    // Atributos da pessoa
-    int id;
-    int idOrganizador;
-    int idLocal;
-    int data;
+    int idEvento;
     String descricao;
     int vagas;
+    int idOrganizador;
 
-    Curso curso; // Referência ao curso do aluno
-
-    // Lista estática que armazena todos os alunos criados
-    static ArrayList<Aluno> alunos = new ArrayList<>();
-    
-    // Construtor que inicializa o aluno com um ID de curso
-    public Aluno(int id, String nome, String nascimento, String CPF, int idCurso) {
-        this.id = id;
-        this.nome = nome;
-        this.nascimento = nascimento;
-        this.CPF = CPF;
-        this.idCurso = idCurso;
-
-        // Adiciona o aluno à lista de alunos
-        alunos.add(this);
+    // Construtor
+    public Evento(String descricao, int vagas, int idOrganizador) {
+        this.descricao = descricao;
+        this.vagas = vagas;
+        this.idOrganizador = idOrganizador;
     }
 
-    // Construtor alternativo que recebe diretamente um objeto Curso
-    public Aluno(int id, String nome, String nascimento, String CPF, Curso curso) {
-        this.id = id;
-        this.nome = nome;
-        this.nascimento = nascimento;
-        this.CPF = CPF;
-        this.curso = curso;
+    // Salvar evento no banco de dados (CRUD - Create)
+    public void salvar() {
+        String query = "INSERT INTO Evento (descricao, vagas, idOrganizador) VALUES (?, ?, ?)";
+        try (Connection conn = ConexaoBanco.conectar();
+             PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 
-        // Adiciona o aluno à lista de alunos
-        alunos.add(this);
-    }
+            stmt.setString(1, descricao);
+            stmt.setInt(2, vagas);
+            stmt.setInt(3, idOrganizador);
+            stmt.executeUpdate();
 
-    // Método estático que conta quantos alunos estão em um determinado curso
-    static int contarAlunosPorCurso(int idCurso) {
-        int cont = 0;
-        for (Aluno aluno : alunos) {
-            // Verifica se o ID do curso do aluno corresponde ao ID fornecido
-            if (aluno.idCurso == idCurso) {
-                cont++;
+            // Obtém o ID gerado automaticamente
+            ResultSet rs = stmt.getGeneratedKeys();
+            if (rs.next()) {
+                this.idEvento = rs.getInt(1);
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        return cont;
+    }
+
+    // Atualizar evento no banco de dados (CRUD - Update)
+    public void atualizar() {
+        String query = "UPDATE Evento SET descricao = ?, vagas = ? WHERE idEvento = ?";
+        try (Connection conn = ConexaoBanco.conectar();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setString(1, descricao);
+            stmt.setInt(2, vagas);
+            stmt.setInt(3, idEvento);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Deletar evento do banco de dados (CRUD - Delete)
+    public void deletar() {
+        String query = "DELETE FROM Evento WHERE idEvento = ?";
+        try (Connection conn = ConexaoBanco.conectar();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setInt(1, idEvento);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Consultar evento pelo ID (CRUD - Read)
+    public static Evento buscarPorId(int id) {
+        String query = "SELECT * FROM Evento WHERE idEvento = ?";
+        try (Connection conn = ConexaoBanco.conectar();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                String descricao = rs.getString("descricao");
+                int vagas = rs.getInt("vagas");
+                int idOrganizador = rs.getInt("idOrganizador");
+                Evento evento = new Evento(descricao, vagas, idOrganizador);
+                evento.idEvento = id;
+                return evento;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
