@@ -1,4 +1,4 @@
-![Evento Java](https://img.shields.io/badge/atividade%20avaliativa-java-yellow)
+![Evento Java](https://img.shields.io/badge/atividade%20avaliativa-java-orange)
 
 # 🎟️ Sistema de Gerenciamento de Eventos - Java
 > Atividade Avaliativa Final – Programação Orientada a Objetos | 2º Semestre ADS
