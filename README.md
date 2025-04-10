@@ -1,6 +1,7 @@
 ![Evento Java](https://img.shields.io/badge/atividade%20avaliativa-java-blueviolet)
 
 # 🎟️ Sistema de Gerenciamento de Eventos - Java
+> Atividade Avaliativa Final – Programação Orientada a Objetos | 2º Semestre ADS
 
 Repositório referente à **Atividade Avaliativa Final** do 2º Semestre de ADS da disciplina de **Programação Orientada a Objetos**, cujo objetivo é desenvolver um sistema de gerenciamento de eventos com funcionalidades de **CRUD** (Create, Read, Update, Delete).
 
